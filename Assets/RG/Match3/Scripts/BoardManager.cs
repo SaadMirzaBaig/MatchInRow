@@ -169,19 +169,14 @@ public class BoardManager : MonoBehaviour {
     }
 
     private void CheckMatchToScore() {
-        
+
         // TEMPORARY HOLDS LAST KNOW COLUMN VALUE FOR PURPLE AND YELLOW TILE
-        int tempHoldColumnP = 0;
-        int tempHoldColumnY = 0;
+        int tempHoldColumn = 0;
         int matchCount;
-        // KEEP MATCH COUNTS FOR PURPLE AND YELLOW TILES
-        int matchCountPurple;
-        int matchCountYellow;
+
 
         for ( int row = 0 ; row < numberOfRows ; row++ ) {
 
-            matchCountPurple = 1;
-            matchCountYellow = 1;
             matchCount = 1;
 
             for ( int column = 0 ; column < numberOfColumns ; column++ ) {
@@ -196,7 +191,7 @@ public class BoardManager : MonoBehaviour {
                         GridElementComponent[column, row].myId == 2 && GridElementComponent[column, row].RightGridElement.myId == 2)
                     {
                         matchCount++;
-                        tempHoldColumnP = column;
+                        tempHoldColumn = column;
 
                     }
 
@@ -206,8 +201,8 @@ public class BoardManager : MonoBehaviour {
                         {
                             for (int i = 0 ; i < matchCount ; i++)
                             {
-                                GridElementComponent[tempHoldColumnP + 1, row].RemoveTile();
-                                tempHoldColumnP--;
+                                GridElementComponent[tempHoldColumn + 1, row].RemoveTile();
+                                tempHoldColumn--;
                             }
 
                             StartCoroutine(WaitToArrange());
@@ -215,9 +210,24 @@ public class BoardManager : MonoBehaviour {
                         }
 
                         matchCount = 1;
-                        matchCountPurple = 1;
-                        matchCountYellow = 1;
                     }
+
+                }
+                else {
+
+                    if (matchCount > 2)
+                    {
+                        for (int i = 0 ; i < matchCount ; i++)
+                        {
+                           GridElementComponent[tempHoldColumn + 1, row].RemoveTile();
+                            tempHoldColumn--;
+                        }
+
+                        //ARRANGE THE GRID AFTER REMOVING THE MATCHING TILES
+                        StartCoroutine(WaitToArrange());
+                    }
+
+                    matchCount = 1;
 
                 }
 
