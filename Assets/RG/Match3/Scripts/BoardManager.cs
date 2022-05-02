@@ -173,7 +173,7 @@ public class BoardManager : MonoBehaviour {
         // TEMPORARY HOLDS LAST KNOW COLUMN VALUE FOR PURPLE AND YELLOW TILE
         int tempHoldColumnP = 0;
         int tempHoldColumnY = 0;
-
+        int matchCount;
         // KEEP MATCH COUNTS FOR PURPLE AND YELLOW TILES
         int matchCountPurple;
         int matchCountYellow;
@@ -182,6 +182,7 @@ public class BoardManager : MonoBehaviour {
 
             matchCountPurple = 1;
             matchCountYellow = 1;
+            matchCount = 1;
 
             for ( int column = 0 ; column < numberOfColumns ; column++ ) {
 
@@ -191,26 +192,19 @@ public class BoardManager : MonoBehaviour {
 
                 if (GridElementComponent[column, row].RightGridElement != null) {
 
-                    if (GridElementComponent[column, row].myId == 1 && GridElementComponent[column, row].RightGridElement.myId == 1)
+                    if (GridElementComponent[column, row].myId == 1 && GridElementComponent[column, row].RightGridElement.myId == 1 ||
+                        GridElementComponent[column, row].myId == 2 && GridElementComponent[column, row].RightGridElement.myId == 2)
                     {
-                        matchCountPurple++;
+                        matchCount++;
                         tempHoldColumnP = column;
-
-                    }
-                    else if (GridElementComponent[column, row].myId == 2 && GridElementComponent[column, row].RightGridElement.myId == 2)
-                    {
-
-                        matchCountYellow++;
-                        tempHoldColumnY = column;
-
 
                     }
 
                     else
                     {
-                        if (matchCountPurple > 2)
+                        if (matchCount > 2)
                         {
-                            for (int i = 0 ; i < matchCountPurple ; i++)
+                            for (int i = 0 ; i < matchCount ; i++)
                             {
                                 GridElementComponent[tempHoldColumnP + 1, row].RemoveTile();
                                 tempHoldColumnP--;
@@ -220,55 +214,10 @@ public class BoardManager : MonoBehaviour {
 
                         }
 
-
-                        else if (matchCountYellow > 2)
-                        {
-                            for (int i = 0 ; i < matchCountYellow ; i++)
-                            {
-                                GridElementComponent[tempHoldColumnY + 1, row].RemoveTile();
-                                tempHoldColumnY--;
-                            }
-
-                            StartCoroutine(WaitToArrange());
-
-                        }
-
-
+                        matchCount = 1;
                         matchCountPurple = 1;
                         matchCountYellow = 1;
                     }
-
-                }
-                else {
-
-
-                    if (matchCountPurple > 2)
-                    {
-                        for (int i = 0 ; i < matchCountPurple ; i++)
-                        {
-                           GridElementComponent[tempHoldColumnP + 1, row].RemoveTile();
-                            tempHoldColumnP--;
-                        }
-
-                        //ARRANGE THE GRID AFTER REMOVING THE MATCHING TILES
-                        StartCoroutine(WaitToArrange());
-                    }
-
-
-                    else if (matchCountYellow > 2)
-                    {
-                        for (int i = 0 ; i < matchCountYellow ; i++)
-                        {
-                            GridElementComponent[tempHoldColumnY + 1, row].RemoveTile();
-                            tempHoldColumnY--;
-                        }
-
-                        //ARRANGE THE GRID AFTER REMOVING THE MATCHING TILES
-                        StartCoroutine(WaitToArrange());
-                    }
-
-                    tempHoldColumnP = 1;
-                    matchCountYellow = 1;
 
                 }
 
